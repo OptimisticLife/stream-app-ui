@@ -1,0 +1,140 @@
+.app-title {
+  font-weight: 400px;
+  font-size: 32px;
+  margin-bottom: 2rem;
+}
+
+/* Common css */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 300px;
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  background-color: transparent;
+  letter-spacing: 0.2px;
+}
+
+input:active,
+input:focus {
+  border-bottom: 1px solid #54b17e;
+}
+
+button {
+  width: 120px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 10px;
+  background-color: #2d6144;
+  color: white;
+  letter-spacing: 0.2px;
+  margin-top: 1rem;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Movie-list CSS */
+
+.movie-list > pre {
+  margin-bottom: 1rem;
+}
+.movie-list-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.movie-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.movie-card img {
+  width: 100px;
+  height: 120px;
+  border-radius: 5px;
+}
+
+.movie-card pre {
+  text-transform: capitalize;
+}
+
+/* Video Player CSS */
+
+.video-player {
+  width: 540px;
+  height: auto;
+  margin-top: 1.5rem;
+  border-radius: 5px;
+}
+
+/* Register Form CSS */
+
+.register {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 600px;
+  max-width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 2rem;
+}
+
+.section-title {
+  color: #54b17e;
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+/* login form css */
+
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 600px;
+  max-width: 100%;
+}
+
+.status {
+  color: rgb(253, 81, 81);
+}
+
+@media screen and (max-width: 600px) {
+  .login-form,
+  .register-form {
+    width: 100%;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
