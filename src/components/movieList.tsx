@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 
-const requestOptions = {
+type credentialsType = "omit" | "same-origin" | "include";
+
+type requestOptionsType = {
+  method: string;
+  credentials: credentialsType;
+  headers: {
+    "Content-Type": string;
+  };
+};
+
+const requestOptions: requestOptionsType = {
   method: "GET",
+  credentials: "include",
   headers: {
     "Content-Type": "application/json",
   },

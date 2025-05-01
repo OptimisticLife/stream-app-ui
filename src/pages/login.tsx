@@ -1,14 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/auth";
+
+type credentialsType = "omit" | "same-origin" | "include";
+
+type requestOptionsType = {
+  method: string;
+  credentials: credentialsType;
+  headers: {
+    "Content-Type": string;
+  };
+  body?: string;
+};
 
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useState("");
+  const { isAuthenticated, refreshAuthStatus } = useAuth();
+
+  useEffect(() => {
+    console.log("isAuthenticated from Login:", isAuthenticated);
+    if (isAuthenticated) {
+      navigate("/"); // Redirect to the dashboard
+    }
+  }, [isAuthenticated, navigate]);
 
   const loginBtnHandler = async () => {
-    const requestOptions = {
+    const requestOptions: requestOptionsType = {
       method: "POST",
       credentials: "include",
       headers: {
@@ -28,8 +48,11 @@ export default function Login() {
       // const data = await response.json();
 
       console.log("Data from the server:", response);
-      if (response.status === 200) {
+      if (response.ok) {
         setLoginStatus("");
+        refreshAuthStatus();
+
+        console.log("Login successful");
         navigate("/"); // Redirect to the dashboard
       } else {
         if (response.status === 401) {
