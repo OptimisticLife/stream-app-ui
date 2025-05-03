@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/auth";
+import useNav from "../hooks/navigate";
 
 type credentialsType = "omit" | "same-origin" | "include";
 
@@ -16,9 +16,9 @@ type requestOptionsType = {
 export default function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const { navigate } = useNav();
   const [loginStatus, setLoginStatus] = useState("");
-  const { isAuthenticated, refreshAuthStatus } = useAuth();
+  const { isAuthenticated, refreshAuthStatus, setLoggedUser } = useAuth();
 
   useEffect(() => {
     console.log("isAuthenticated from Login:", isAuthenticated);
@@ -46,14 +46,19 @@ export default function Login() {
         requestOptions
       );
       // const data = await response.json();
+      const bodyRes = await response.json();
 
-      console.log("Data from the server:", response);
+      console.log("Data from the server:", bodyRes);
       if (response.ok) {
         setLoginStatus("");
         refreshAuthStatus();
-
+        if (bodyRes.userName) {
+          console.log("UserName logged:", bodyRes.userName);
+          setLoggedUser(bodyRes.userName);
+        }
         console.log("Login successful");
-        navigate("/"); // Redirect to the dashboard
+        navigate("/");
+        // Redirect to the dashboard
       } else {
         if (response.status === 401) {
           setLoginStatus("Invalid username or password.");
@@ -90,6 +95,15 @@ export default function Login() {
           Login
         </button>
         {loginStatus && <pre className="status">{loginStatus}</pre>}
+        {
+          <pre className="info">
+            New user ? Kindly{" "}
+            <a href="/register" className="info-link">
+              register
+            </a>{" "}
+            with us.
+          </pre>
+        }
       </div>
     </div>
   );

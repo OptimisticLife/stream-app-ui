@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import useNav from "../hooks/navigate";
 
 export default function Register() {
   const [userName, setUserName] = useState("");
@@ -9,7 +9,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [registerStatus, setRegisterStatus] = useState("");
-  const navigate = useNavigate();
+  const { navigate } = useNav();
 
   const registerBtnHandler = async () => {
     const requestOptions = {
@@ -113,6 +113,13 @@ export default function Register() {
           Register
         </button>
         {registerStatus && <pre className="status">{registerStatus}</pre>}
+        <pre className="info">
+          Already Registered with us?. Kindly{" "}
+          <a href="/login" className="info-link">
+            login
+          </a>{" "}
+          .
+        </pre>
       </div>
     </div>
   );

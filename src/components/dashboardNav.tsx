@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/auth";
+import useNav from "../hooks/navigate";
 
 type credentialsType = "omit" | "same-origin" | "include";
 
@@ -13,8 +13,8 @@ type requestOptionsType = {
 };
 
 function DashboardNav() {
-  const navigate = useNavigate();
-  const { refreshAuthStatus } = useAuth();
+  const { navigate } = useNav();
+  const { refreshAuthStatus, setLoggedUser, loggedUser } = useAuth();
   const logoutHandler = async () => {
     const requestOptions: requestOptionsType = {
       method: "POST",
@@ -31,12 +31,15 @@ function DashboardNav() {
       );
       if (response.ok) {
         console.log("Logout successful");
-        refreshAuthStatus(); // Refresh the authentication status
+        refreshAuthStatus();
+        setLoggedUser(""); // Refresh the authentication status
         navigate("/login"); // Redirect to the login page
       } else {
         if (response.status === 401) {
           refreshAuthStatus(); // Refresh the authentication status
-          navigate("/login"); // Redirect to the login page
+          navigate("/login");
+          setLoggedUser(""); // Refresh the authentication status
+          // Redirect to the login page
         }
         console.error("Logout failed");
       }
@@ -48,9 +51,16 @@ function DashboardNav() {
   return (
     <div className="dashboard-nav">
       <p className="app-title">Movie Times</p>
-      <button className="logout-btn" onClick={logoutHandler}>
-        Logout
-      </button>
+
+      <div className="user-info">
+        <pre className="logged-user">{loggedUser}</pre>
+        <span
+          className="material-symbols-outlined logout-btn"
+          onClick={logoutHandler}
+        >
+          chip_extraction
+        </span>
+      </div>
     </div>
   );
 }

@@ -24,6 +24,7 @@ async function fetchUser(): Promise<boolean> {
 // Create a provider component
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loggedUser, setLoggedUser] = useState<string>("");
 
   const refreshAuthStatus = () => {
     if (document.cookie.includes("token")) {
@@ -33,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
     } else {
       setIsAuthenticated(false);
+      setLoggedUser("");
     }
   };
 
@@ -41,7 +43,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, refreshAuthStatus }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, refreshAuthStatus, loggedUser, setLoggedUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
