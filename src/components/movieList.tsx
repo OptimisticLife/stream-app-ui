@@ -51,7 +51,7 @@ export default function MovieList({
   };
   return (
     <div className="movie-list">
-      <pre>Movies from the server:4647 ..</pre>
+      <pre className="section-title">Movies from the server:4647 ..</pre>
       <div className="movie-list-container">
         {movies.length > 0 &&
           movies.map(

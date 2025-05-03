@@ -53,7 +53,9 @@ export default function Register() {
 
   return (
     <div className="register">
-      <p className="register-title section-title ">Register for Movie Times</p>
+      <pre className="register-title section-title ">
+        Register for Movie Times
+      </pre>
       <div className="register-form">
         <div className="form-row">
           <input

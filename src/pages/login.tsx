@@ -55,6 +55,7 @@ export default function Login() {
         if (bodyRes.userName) {
           console.log("UserName logged:", bodyRes.userName);
           setLoggedUser(bodyRes.userName);
+          localStorage.setItem("loggedUser", bodyRes.userName);
         }
         console.log("Login successful");
         navigate("/");

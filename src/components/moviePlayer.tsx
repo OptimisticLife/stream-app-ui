@@ -13,7 +13,7 @@ export default function MoviePlayer({ videoSrc }: { videoSrc: string }) {
     (
       // Check if videoSrc is not empty
       <div className="movieplayer">
-        <pre>{videoSrc}</pre>
+        <pre className="section-title">{videoSrc}</pre>
         <video className="video-player" ref={videoRef} controls>
           <source src={videoSrc} type="video/mp4" />
         </video>

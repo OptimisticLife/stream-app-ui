@@ -50,8 +50,7 @@ function DashboardNav() {
   };
   return (
     <div className="dashboard-nav">
-      <p className="app-title">Movie Times</p>
-
+      <pre className="app-title">Movie Times</pre>
       <div className="user-info">
         <pre className="logged-user">{loggedUser}</pre>
         <span
