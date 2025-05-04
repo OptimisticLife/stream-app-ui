@@ -38,6 +38,7 @@ button:disabled {
 /* Dashboard */
 
 .dashboard {
+  width: 80%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -62,6 +63,7 @@ button:disabled {
   align-items: center;
   gap: 20px;
   overflow-x: auto;
+  padding: 0.75rem;
 }
 
 .movie-card {
@@ -161,7 +163,7 @@ button:disabled {
 /* Nav Dashboard */
 
 .dashboard-nav {
-  min-height: 50px;
+  min-height: 84px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -191,6 +193,26 @@ button:disabled {
   text-transform: capitalize;
 }
 
+.upload-btn,
+.back-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.upload-movie {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.back-link {
+  margin-bottom: 1.5rem;
+}
+
 @media screen and (max-width: 600px) {
   button {
     width: 90px;
@@ -217,6 +239,7 @@ button:disabled {
   }
 
   .dashboard-nav {
+    min-height: 50px;
     margin-bottom: 0.8rem;
   }
 

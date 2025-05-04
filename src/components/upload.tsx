@@ -70,7 +70,11 @@ function uploadingChunks(file: File, fetchUrl: string) {
   });
 }
 
-function UploadFile() {
+function UploadFile({
+  uploadViewHandler,
+}: {
+  uploadViewHandler: (view: boolean) => void;
+}) {
   const [thumbnail, setThumbnail] = useState<unknown | File>(null);
   const [movieName, setMovieName] = useState<string>("");
   const [movie, setMovie] = useState<unknown | File>(null);
@@ -154,6 +158,18 @@ function UploadFile() {
   };
   return (
     <div className="upload-movie">
+      <div className="back-link " onClick={() => uploadViewHandler(false)}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="20px"
+          viewBox="0 -960 960 960"
+          width="20px"
+          fill="#54b17e"
+        >
+          <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+        </svg>
+        <pre>Back</pre>
+      </div>
       <pre className="section-title">Upload Movies</pre>
       <div className="upload-form">
         <input
