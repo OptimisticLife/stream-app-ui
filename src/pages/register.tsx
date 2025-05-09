@@ -28,10 +28,7 @@ export default function Register() {
     };
 
     try {
-      const apiResponse = await fetch(
-        "http://localhost:4647/register",
-        requestOptions
-      );
+      const apiResponse = await fetch("/api/register", requestOptions);
       const response = await apiResponse.json();
       console.log("Data from the server:", response);
 

@@ -30,10 +30,7 @@ export default function MovieList({
 
     async function fetchMovies() {
       try {
-        const apiResponse = await fetch(
-          "http://localhost:4647/getMovies",
-          requestOptions
-        );
+        const apiResponse = await fetch("/api/getMovies", requestOptions);
         const movies = await apiResponse.json();
         console.log("Data from the server:", movies);
         setMovies(movies);
@@ -47,11 +44,11 @@ export default function MovieList({
   // dependency array to run this effect only once when the component mounts
 
   const movieHandler = (videosrc: string) => {
-    setVideoSrc(videosrc);
+    setVideoSrc(`/api/${videosrc}`);
   };
   return (
     <div className="movie-list">
-      <pre className="section-title">Movies from the server:4647 ..</pre>
+      <pre className="section-title">Movies from the server:4647..</pre>
       <div className="movie-list-container">
         {movies.length > 0 &&
           movies.map(
@@ -64,7 +61,7 @@ export default function MovieList({
                 key={index}
                 onClick={() => movieHandler(movie.videoSrc)}
               >
-                <img src={movie.img} alt={movie.title} />
+                <img src={`/api/${movie.img}`} alt={movie.title} />
                 <pre>{movie.title}</pre>
               </div>
             )

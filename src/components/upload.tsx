@@ -121,18 +121,12 @@ function UploadFile({
     };
 
     try {
-      await fetch("http://localhost:4647/upload-movie", newMovieRequestOptions);
-      await uploadingChunks(
-        movie as File,
-        "http://localhost:4647/upload-movie-chunk"
-      );
-      await uploadingChunks(
-        thumbnail as File,
-        "http://localhost:4647/upload-thumbnail-chunk"
-      );
+      await fetch("/api/upload-movie", newMovieRequestOptions);
+      await uploadingChunks(movie as File, "/api/upload-movie-chunk");
+      await uploadingChunks(thumbnail as File, "/api/upload-thumbnail-chunk");
 
       const response = await fetch(
-        "http://localhost:4647/movie-uploaded-confirmation",
+        "/api/movie-uploaded-confirmation",
         uploadConfirmationReq
       );
       if (response.ok) {

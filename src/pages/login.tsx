@@ -41,10 +41,7 @@ export default function Login() {
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:4647/login",
-        requestOptions
-      );
+      const response = await fetch("/api/login", requestOptions);
       // const data = await response.json();
       const bodyRes = await response.json();
 

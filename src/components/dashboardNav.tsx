@@ -25,10 +25,7 @@ function DashboardNav() {
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:4647/logout",
-        requestOptions
-      );
+      const response = await fetch("/api/logout", requestOptions);
       if (response.ok) {
         console.log("Logout successful");
         refreshAuthStatus();

@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { AuthContext } from "./authContext";
 
 async function fetchUser(): Promise<boolean> {
   try {
-    const response = await fetch("http://localhost:4647/check-session", {
+    const response = await fetch("/api/check-session", {
       method: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
     });
+
+    console.log("Response from check-session:", response);
     if (response.ok) {
       return true;
     } else {
@@ -26,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loggedUser, setLoggedUser] = useState<string>("");
 
-  const refreshAuthStatus = () => {
+  const refreshAuthStatus = useCallback(() => {
     if (document.cookie.includes("token")) {
       console.log("Token found in cookies");
       fetchUser().then((authStatus) => {
@@ -36,14 +38,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       });
     } else {
+      console.log("Token not found in cookies");
       setIsAuthenticated(false);
       setLoggedUser("");
     }
-  };
+  }, [loggedUser]);
 
   useEffect(() => {
     refreshAuthStatus();
-  }, []);
+  }, [refreshAuthStatus]);
 
   return (
     <AuthContext.Provider

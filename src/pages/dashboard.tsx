@@ -6,7 +6,7 @@ import UploadFile from "../components/upload";
 import UploadBtn from "../components/uploadBtn";
 
 export default function Dashboard() {
-  const [videoSrc, setVideoSrc] = useState("http://localhost:4647/video-1.mp4");
+  const [videoSrc, setVideoSrc] = useState("/api/video-1.mp4");
 
   const [uploadView, setUploadView] = useState(false);
 
