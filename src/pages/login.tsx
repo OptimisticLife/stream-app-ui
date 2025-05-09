@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/auth";
 import useNav from "../hooks/navigate";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 type credentialsType = "omit" | "same-origin" | "include";
 
 type requestOptionsType = {
@@ -41,7 +43,7 @@ export default function Login() {
     };
 
     try {
-      const response = await fetch("/api/login", requestOptions);
+      const response = await fetch(`${apiUrl}/login`, requestOptions);
       // const data = await response.json();
       const bodyRes = await response.json();
 

@@ -10,6 +10,8 @@ type requestOptionsType = {
   };
 };
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const requestOptions: requestOptionsType = {
   method: "GET",
   credentials: "include",
@@ -44,7 +46,7 @@ export default function MovieList({
   // dependency array to run this effect only once when the component mounts
 
   const movieHandler = (videosrc: string) => {
-    setVideoSrc(`/api/${videosrc}`);
+    setVideoSrc(`${apiUrl}/${videosrc}`);
   };
   return (
     <div className="movie-list">
@@ -61,7 +63,7 @@ export default function MovieList({
                 key={index}
                 onClick={() => movieHandler(movie.videoSrc)}
               >
-                <img src={`/api/${movie.img}`} alt={movie.title} />
+                <img src={`${apiUrl}/${movie.img}`} alt={movie.title} />
                 <pre>{movie.title}</pre>
               </div>
             )

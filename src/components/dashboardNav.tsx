@@ -12,6 +12,8 @@ type requestOptionsType = {
   body?: string;
 };
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 function DashboardNav() {
   const { navigate } = useNav();
   const { refreshAuthStatus, setLoggedUser, loggedUser } = useAuth();
@@ -25,7 +27,7 @@ function DashboardNav() {
     };
 
     try {
-      const response = await fetch("/api/logout", requestOptions);
+      const response = await fetch(`${apiUrl}/logout`, requestOptions);
       if (response.ok) {
         console.log("Logout successful");
         refreshAuthStatus();

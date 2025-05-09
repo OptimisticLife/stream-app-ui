@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useNav from "../hooks/navigate";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function Register() {
   const [userName, setUserName] = useState("");
@@ -28,7 +29,7 @@ export default function Register() {
     };
 
     try {
-      const apiResponse = await fetch("/api/register", requestOptions);
+      const apiResponse = await fetch(`${apiUrl}/register`, requestOptions);
       const response = await apiResponse.json();
       console.log("Data from the server:", response);
 
