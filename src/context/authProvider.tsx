@@ -29,18 +29,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loggedUser, setLoggedUser] = useState<string>("");
 
   const refreshAuthStatus = useCallback(() => {
-    if (document.cookie.includes("token")) {
-      console.log("Token found in cookies");
+    try {
       fetchUser().then((authStatus) => {
         setIsAuthenticated(authStatus);
         if (!loggedUser) {
           setLoggedUser(localStorage.getItem("loggedUser") || "");
         }
       });
-    } else {
-      console.log("Token not found in cookies");
-      setIsAuthenticated(false);
-      setLoggedUser("");
+    } catch (error) {
+      console.error("Error in refreshAuthStatus:", error);
     }
   }, [loggedUser]);
 
