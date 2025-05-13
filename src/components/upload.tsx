@@ -29,6 +29,8 @@ type requestOptionsPlain = {
   };
 };
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 function uploadingChunks(file: File, fetchUrl: string) {
   return new Promise((resolve, reject) => {
     if (!file) return;
@@ -123,12 +125,15 @@ function UploadFile({
     };
 
     try {
-      await fetch("/api/upload-movie", newMovieRequestOptions);
-      await uploadingChunks(movie as File, "/api/upload-movie-chunk");
-      await uploadingChunks(thumbnail as File, "/api/upload-thumbnail-chunk");
+      await fetch(`${apiUrl}/upload-movie`, newMovieRequestOptions);
+      await uploadingChunks(movie as File, `${apiUrl}/upload-movie-chunk`);
+      await uploadingChunks(
+        thumbnail as File,
+        `${apiUrl}/upload-thumbnail-chunk`
+      );
 
       const response = await fetch(
-        "/api/movie-uploaded-confirmation",
+        `${apiUrl}/movie-uploaded-confirmation`,
         uploadConfirmationReq
       );
       if (response.ok) {

@@ -32,7 +32,7 @@ export default function MovieList({
 
     async function fetchMovies() {
       try {
-        const apiResponse = await fetch("/api/getMovies", requestOptions);
+        const apiResponse = await fetch(`${apiUrl}/getMovies`, requestOptions);
         const movies = await apiResponse.json();
         console.log("Data from the server:", movies);
         setMovies(movies);
