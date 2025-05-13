@@ -1,9 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { AuthContext } from "./authContext";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 async function fetchUser(): Promise<boolean> {
   try {
-    const response = await fetch("/api/check-session", {
+    const response = await fetch(`${apiUrl}/check-session`, {
       method: "GET",
       credentials: "include",
       headers: {
