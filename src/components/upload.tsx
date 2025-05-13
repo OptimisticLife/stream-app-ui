@@ -80,6 +80,7 @@ function UploadFile({
   const [movie, setMovie] = useState<unknown | File>(null);
   const movieRef = useRef(null);
   const thumbnailRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const thumbnailInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -94,6 +95,7 @@ function UploadFile({
   };
 
   const uploadHandler = async () => {
+    setIsLoading(true);
     const movieDetails = {
       movieName: movieName,
       thumbnailName: movieName,
@@ -133,6 +135,7 @@ function UploadFile({
         setMovie(null);
         setThumbnail(null);
         setMovieName("");
+        setIsLoading(false);
         if (movieRef.current) {
           (movieRef.current as HTMLInputElement).value = "";
         }
@@ -197,10 +200,12 @@ function UploadFile({
           />
         </div>
         <button
+          className="upload-form-btn"
           onClick={uploadHandler}
           disabled={!thumbnail || !movie || !movieName}
         >
-          Upload{" "}
+          <pre>Upload</pre>
+          {isLoading && <span className="loader"></span>}
         </button>
       </div>
     </div>
