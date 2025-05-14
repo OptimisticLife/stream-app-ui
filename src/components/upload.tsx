@@ -1,76 +1,7 @@
 import { useState, useRef } from "react";
-
-type credentialsType = "omit" | "same-origin" | "include";
-const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
-
-type requestOptionsTypeBlob = {
-  method: string;
-  credentials: credentialsType;
-  headers: {
-    "Content-Type": string;
-  };
-  body?: Blob;
-};
-
-type requestOptionsTypeNewMovie = {
-  method: string;
-  credentials: credentialsType;
-  headers: {
-    "Content-Type": string;
-  };
-  body?: string | null;
-};
-
-type requestOptionsPlain = {
-  method: string;
-  credentials: credentialsType;
-  headers: {
-    "Content-Type": string;
-  };
-};
+import { uploadingChunks } from "../util/uploadchunk";
 
 const apiUrl = import.meta.env.VITE_API_URL;
-
-function uploadingChunks(file: File, fetchUrl: string) {
-  return new Promise((resolve, reject) => {
-    if (!file) return;
-
-    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-    let currentChunk = 0;
-
-    const uploadNextChunk = async () => {
-      const start = currentChunk * CHUNK_SIZE;
-      const end = Math.min(file.size, start + CHUNK_SIZE);
-      const chunk = file.slice(start, end);
-
-      const requestOptions: requestOptionsTypeBlob = {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: chunk,
-      };
-
-      try {
-        await fetch(fetchUrl, requestOptions);
-
-        currentChunk++;
-        if (currentChunk < totalChunks) {
-          uploadNextChunk(); // Recursive next chunk
-        } else {
-          resolve("Upload complete");
-          console.log("Upload complete");
-        }
-      } catch (error) {
-        console.error("Chunk upload failed", error);
-        reject(error);
-      }
-    };
-
-    uploadNextChunk();
-  });
-}
 
 function UploadFile({
   uploadViewHandler,
@@ -78,86 +9,88 @@ function UploadFile({
   uploadViewHandler: (view: boolean) => void;
 }) {
   const [thumbnail, setThumbnail] = useState<unknown | File>(null);
+  const [thumbnailErrMsg, setThumbnailErrMsg] = useState<string>("");
   const [movieName, setMovieName] = useState<string>("");
   const [movie, setMovie] = useState<unknown | File>(null);
+  const [movieErrMsg, setMovieErrMsg] = useState<string>("");
   const movieRef = useRef(null);
   const thumbnailRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const thumbnailInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setThumbnail(e.target?.files[0]);
+      // Should check .jpeg and size  < 5MB i.e 5000000Byte
+      const file = e.target?.files[0];
+      console.log("File Type:", file.type, file.size);
+      if (file.size > 5000000) {
+        setThumbnailErrMsg("File size should less than 5MB.");
+        return;
+      }
+      if (file.type !== "image/jpeg") {
+        setThumbnailErrMsg("Thumbnail image should be jpeg format");
+        return;
+      }
+      setThumbnailErrMsg("");
+      setThumbnail(e.target.files[0]);
     }
   };
 
   const movieInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      // Should check .mp4 and size  < 50MB i.e 50000000Byte
+      const file = e.target?.files[0];
+      console.log("File Type:", file);
+
+      if (file.size > 50000000) {
+        setMovieErrMsg("File size should less than 50MB.");
+        return;
+      }
+      if (file.type !== "video/mp4") {
+        setMovieErrMsg("Thumbnail image should be mp4 format");
+        return;
+      }
+      setMovieErrMsg("");
       setMovie(e.target?.files[0]);
     }
   };
 
   const uploadHandler = async () => {
     setIsLoading(true);
-    const movieDetails = {
-      movieName: movieName,
-      thumbnailName: movieName,
-      movieSize: movie instanceof File ? movie.size : 0,
-      thumbnailSize: thumbnail instanceof File ? thumbnail.size : 0,
-      movieType: movie instanceof File ? movie.type : "",
-      thumbnailType: thumbnail instanceof File ? thumbnail.type : "",
-    };
 
-    const newMovieRequestOptions: requestOptionsTypeNewMovie = {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(movieDetails),
-    };
-
-    const uploadConfirmationReq: requestOptionsPlain = {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+    const fileId =
+      movieName + "-" + Math.random().toString(36).substring(2, 14);
 
     try {
-      await fetch(`${apiUrl}/upload-movie`, newMovieRequestOptions);
-      await uploadingChunks(movie as File, `${apiUrl}/upload-movie-chunk`);
       await uploadingChunks(
         thumbnail as File,
-        `${apiUrl}/upload-thumbnail-chunk`
+        `${apiUrl}/upload-thumbnail-chunk`,
+        fileId
       );
 
-      const response = await fetch(
-        `${apiUrl}/movie-uploaded-confirmation`,
-        uploadConfirmationReq
+      await uploadingChunks(
+        movie as File,
+        `${apiUrl}/upload-movie-chunk`,
+        fileId
       );
-      if (response.ok) {
-        setMovie(null);
-        setThumbnail(null);
-        setMovieName("");
-        setIsLoading(false);
-        if (movieRef.current) {
-          (movieRef.current as HTMLInputElement).value = "";
-        }
-        if (thumbnailRef.current) {
-          (thumbnailRef.current as HTMLInputElement).value = "";
-        }
 
-        console.log("Upload completed successfully");
-      } else {
-        console.log("Upload failed");
+      setMovie(null);
+      setThumbnail(null);
+      setMovieName("");
+      setIsLoading(false);
+      if (movieRef.current) {
+        (movieRef.current as HTMLInputElement).value = "";
       }
+      if (thumbnailRef.current) {
+        (thumbnailRef.current as HTMLInputElement).value = "";
+      }
+      console.log("Upload completed successfully");
     } catch (error) {
       console.error("Error uploading files:", error);
     }
 
     // Make sure to upload the movie and thumbnail the entire size.
   };
+
   return (
     <div className="upload-movie">
       <div className="back-link " onClick={() => uploadViewHandler(false)}>
@@ -191,6 +124,8 @@ function UploadFile({
             id="file-thumbnail"
             ref={thumbnailRef}
           />
+
+          {thumbnailErrMsg && <pre className="status">{thumbnailErrMsg}</pre>}
         </div>
         <div className="file-input">
           <label htmlFor="file-movie" className="custom-file-upload">
@@ -203,6 +138,7 @@ function UploadFile({
             id="file-movie"
             ref={movieRef}
           />
+          {movieErrMsg && <pre className="status">{movieErrMsg}</pre>}
         </div>
         <button
           className="upload-form-btn"

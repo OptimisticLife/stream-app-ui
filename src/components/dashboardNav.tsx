@@ -1,11 +1,9 @@
 import { useAuth } from "../hooks/auth";
 import useNav from "../hooks/navigate";
 
-type credentialsType = "omit" | "same-origin" | "include";
-
 type requestOptionsType = {
   method: string;
-  credentials: credentialsType;
+  credentials: RequestCredentials;
   headers: {
     "Content-Type": string;
   };

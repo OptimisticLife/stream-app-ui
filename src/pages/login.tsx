@@ -4,11 +4,9 @@ import useNav from "../hooks/navigate";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-type credentialsType = "omit" | "same-origin" | "include";
-
 type requestOptionsType = {
   method: string;
-  credentials: credentialsType;
+  credentials: RequestCredentials;
   headers: {
     "Content-Type": string;
   };

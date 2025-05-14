@@ -5,10 +5,8 @@ import DashboardNav from "../components/dashboardNav";
 import UploadFile from "../components/upload";
 import UploadBtn from "../components/uploadBtn";
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
 export default function Dashboard() {
-  const [videoSrc, setVideoSrc] = useState(`${apiUrl}/video-1.mp4`);
+  const [videoSrc, setVideoSrc] = useState("");
 
   const [uploadView, setUploadView] = useState(false);
 

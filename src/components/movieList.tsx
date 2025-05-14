@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 
-type credentialsType = "omit" | "same-origin" | "include";
-
 type requestOptionsType = {
   method: string;
-  credentials: credentialsType;
+  credentials: RequestCredentials;
   headers: {
     "Content-Type": string;
   };
@@ -19,13 +17,17 @@ const requestOptions: requestOptionsType = {
     "Content-Type": "application/json",
   },
 };
+type MovieType = {
+  id: string;
+  name: string;
+};
 
 export default function MovieList({
   setVideoSrc,
 }: {
   setVideoSrc: (src: string) => void;
 }) {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<Array<MovieType>>([]);
 
   useEffect(() => {
     // Fetch data from the server
@@ -46,28 +48,23 @@ export default function MovieList({
   // dependency array to run this effect only once when the component mounts
 
   const movieHandler = (videosrc: string) => {
-    setVideoSrc(`${apiUrl}/${videosrc}`);
+    setVideoSrc(`${apiUrl}/${videosrc}.mp4`);
   };
   return (
     <div className="movie-list">
       <pre className="section-title">Movies from the server:4647..</pre>
       <div className="movie-list-container">
         {movies.length > 0 &&
-          movies.map(
-            (
-              movie: { title: string; img: string; videoSrc: string },
-              index: number
-            ) => (
-              <div
-                className="movie-card"
-                key={index}
-                onClick={() => movieHandler(movie.videoSrc)}
-              >
-                <img src={`${apiUrl}/${movie.img}`} alt={movie.title} />
-                <pre>{movie.title}</pre>
-              </div>
-            )
-          )}
+          movies.map((movie: { id: string; name: string }, index: number) => (
+            <div
+              className="movie-card"
+              key={index}
+              onClick={() => movieHandler(movie.id)}
+            >
+              <img src={`${apiUrl}/${movie.id}.jpeg`} alt={movie.id} />
+              <pre>{movie.name}</pre>
+            </div>
+          ))}
       </div>
     </div>
   );
