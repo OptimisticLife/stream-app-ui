@@ -8,7 +8,7 @@ import ProtectedRoute from "./components/protectedRoute";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <AuthProvider>
         <div className="App">
           <Routes>
