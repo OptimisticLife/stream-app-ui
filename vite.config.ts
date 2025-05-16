@@ -7,16 +7,5 @@ export default defineConfig(() => {
   return {
     base: "/",
     plugins: [react()],
-    // server: {
-    //   proxy: {
-    //     "/api": {
-    //       target: isDev
-    //         ? "http://localhost:4647"
-    //         : "https://stream-app-server-auj8.onrender.com", // Your Node proxy server
-    //       changeOrigin: true,
-    //       rewrite: (path) => path.replace(/^\/api/, ""),
-    //     },
-    //   },
-    // },
   };
 });
