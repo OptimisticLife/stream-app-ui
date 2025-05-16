@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { AuthContext } from "./authContext";
+import useNav from "../hooks/navigate";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -14,34 +15,44 @@ async function fetchUser(): Promise<boolean> {
     });
 
     console.log("Response from check-session:", response);
-    if (response.ok) {
-      return true;
-    } else {
-      return false;
-    }
+    return response.ok;
   } catch (error) {
     console.error("Error fetching user data:", error);
     return false;
   }
 }
 
-// Create a provider component
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loggedUser, setLoggedUser] = useState<string>("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loggedUser, setLoggedUser] = useState(
+    () => localStorage.getItem("loggedUser") || ""
+  );
+  const { navigate } = useNav();
+  const [loading, setLoading] = useState(true);
 
-  const refreshAuthStatus = useCallback(() => {
+  const refreshAuthStatus = useCallback(async () => {
+    console.trace("refreshAuthStatus triggered");
+    if (!isAuthenticated) setLoading(true);
     try {
-      fetchUser().then((authStatus) => {
-        setIsAuthenticated(authStatus);
+      const isAuth = await fetchUser();
+
+      if (isAuthenticated !== isAuth) {
+        setIsAuthenticated(isAuth);
+
         if (!loggedUser) {
-          setLoggedUser(localStorage.getItem("loggedUser") || "");
+          const storedUser = localStorage.getItem("loggedUser") || "";
+          setLoggedUser(storedUser);
         }
-      });
+        if (!isAuth) {
+          navigate("/login");
+        }
+      }
     } catch (error) {
       console.error("Error in refreshAuthStatus:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [loggedUser]);
+  }, [loggedUser, navigate, isAuthenticated]);
 
   useEffect(() => {
     refreshAuthStatus();
@@ -49,7 +60,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, refreshAuthStatus, loggedUser, setLoggedUser }}
+      value={{
+        isAuthenticated,
+        refreshAuthStatus,
+        loggedUser,
+        setLoggedUser,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>

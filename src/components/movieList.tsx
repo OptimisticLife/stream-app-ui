@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/auth";
 
 type requestOptionsType = {
   method: string;
@@ -28,6 +29,7 @@ export default function MovieList({
   setVideoSrc: (src: string) => void;
 }) {
   const [movies, setMovies] = useState<Array<MovieType>>([]);
+  const { refreshAuthStatus } = useAuth();
 
   useEffect(() => {
     // Fetch data from the server
@@ -47,8 +49,9 @@ export default function MovieList({
   //
   // dependency array to run this effect only once when the component mounts
 
-  const movieHandler = (videosrc: string) => {
-    setVideoSrc(`${apiUrl}/${videosrc}.mp4`);
+  const movieHandler = async (videosrc: string) => {
+    await refreshAuthStatus();
+    await setVideoSrc(`${apiUrl}/${videosrc}.mp4`);
   };
   return (
     <div className="movie-list">

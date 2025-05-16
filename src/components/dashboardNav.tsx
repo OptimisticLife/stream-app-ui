@@ -1,5 +1,4 @@
 import { useAuth } from "../hooks/auth";
-import useNav from "../hooks/navigate";
 
 type requestOptionsType = {
   method: string;
@@ -13,7 +12,6 @@ type requestOptionsType = {
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function DashboardNav() {
-  const { navigate } = useNav();
   const { refreshAuthStatus, setLoggedUser, loggedUser } = useAuth();
   const logoutHandler = async () => {
     const requestOptions: requestOptionsType = {
@@ -26,25 +24,23 @@ function DashboardNav() {
 
     try {
       const response = await fetch(`${apiUrl}/logout`, requestOptions);
-      if (response.ok) {
-        console.log("Logout successful");
-        refreshAuthStatus();
-        setLoggedUser(""); // Refresh the authentication status
-        navigate("/login"); // Redirect to the login page
-      } else {
-        if (response.status === 401) {
-          refreshAuthStatus(); // Refresh the authentication status
-          navigate("/login");
-          setLoggedUser(""); // Refresh the authentication status
-          // Redirect to the login page
-        }
+
+      if (!response.ok && response.status !== 401) {
         console.error("Logout failed");
+        return;
       }
+
+      // Proceed with cleanup
+      setLoggedUser(""); // Clear user info
+      await refreshAuthStatus(); // Re-check session (will set isAuthenticated to false)// Redirect user
     } catch (error) {
-      refreshAuthStatus(); // Refresh the authentication status
       console.error("Error during logout:", error);
+      // Optionally fallback to cleanup even if logout fails
+      setLoggedUser("");
+      await refreshAuthStatus();
     }
   };
+
   return (
     <div className="dashboard-nav">
       <pre className="app-title">Movie Times</pre>

@@ -5,6 +5,7 @@ type AuthContextType = {
   refreshAuthStatus: () => void;
   loggedUser: string;
   setLoggedUser: (userName: string) => void;
+  loading: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -12,4 +13,5 @@ export const AuthContext = createContext<AuthContextType>({
   refreshAuthStatus: () => {},
   loggedUser: "",
   setLoggedUser: () => {},
+  loading: false,
 });
