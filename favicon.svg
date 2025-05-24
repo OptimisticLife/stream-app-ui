@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <!-- Define a circular clip path -->
+    <clipPath id="circleClip">
+      <circle cx="32" cy="32" r="30" />
+    </clipPath>
+  </defs>
+
+  <!-- Dark green background (will be clipped) -->
+  <rect width="64" height="64" fill="#2d6144" clip-path="url(#circleClip)" />
+
+  <!-- Light green outlined elements, clipped inside the circle -->
+  <g clip-path="url(#circleClip)">
+    <circle cx="32" cy="32" r="30" fill="none" stroke="#54b17e" stroke-width="4" />
+    <polygon points="26,20 46,32 26,44" fill="none" stroke="#54b17e" stroke-width="3" />
+    <path d="M10 20 C5 30, 5 34, 10 44" stroke="#54b17e" stroke-width="3" fill="none" />
+    <path d="M54 20 C59 30, 59 34, 54 44" stroke="#54b17e" stroke-width="3" fill="none" />
+  </g>
+</svg>

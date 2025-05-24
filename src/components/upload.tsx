@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { uploadingChunks } from "../util/uploadchunk";
+import LoadingButton from "./loadingbtn";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -140,14 +141,14 @@ function UploadFile({
           />
           {movieErrMsg && <pre className="status">{movieErrMsg}</pre>}
         </div>
-        <button
-          className="upload-form-btn"
-          onClick={uploadHandler}
-          disabled={!thumbnail || !movie || !movieName}
-        >
-          <pre>Upload</pre>
-          {isLoading && <span className="loader"></span>}
-        </button>
+
+        <LoadingButton
+          id="Upload-btn"
+          btnHandler={uploadHandler}
+          isDisabled={!thumbnail || !movie || !movieName}
+          isLoading={isLoading}
+          label="Upload Movie"
+        />
       </div>
     </div>
   );

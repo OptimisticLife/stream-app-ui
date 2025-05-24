@@ -24,9 +24,9 @@ type MovieType = {
 };
 
 export default function MovieList({
-  setVideoSrc,
+  setPlayingMovie,
 }: {
-  setVideoSrc: (src: string) => void;
+  setPlayingMovie: ({ id, name }: MovieType & { video: string }) => void;
 }) {
   const [movies, setMovies] = useState<Array<MovieType>>([]);
   const { refreshAuthStatus } = useAuth();
@@ -49,10 +49,14 @@ export default function MovieList({
   //
   // dependency array to run this effect only once when the component mounts
 
-  const movieHandler = async (videosrc: string) => {
+  const movieHandler = async (movie: MovieType) => {
     await refreshAuthStatus();
-    await setVideoSrc(`${apiUrl}/${videosrc}.mp4`);
+    await setPlayingMovie({
+      ...movie,
+      video: `${apiUrl}/${movie.id}.mp4`,
+    });
   };
+
   return (
     <div className="movie-list">
       <pre className="section-title">Movies from the server:4647..</pre>
@@ -62,7 +66,7 @@ export default function MovieList({
             <div
               className="movie-card"
               key={index}
-              onClick={() => movieHandler(movie.id)}
+              onClick={() => movieHandler(movie)}
             >
               <img src={`${apiUrl}/${movie.id}.jpeg`} alt={movie.id} />
               <pre>{movie.name}</pre>

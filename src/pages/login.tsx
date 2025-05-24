@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/auth";
 import useNav from "../hooks/navigate";
+import LoadingButton from "../components/loadingbtn";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -19,6 +20,7 @@ export default function Login() {
   const { navigate } = useNav();
   const [loginStatus, setLoginStatus] = useState("");
   const { isAuthenticated, refreshAuthStatus, setLoggedUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     console.log("isAuthenticated from Login:", isAuthenticated);
@@ -28,6 +30,7 @@ export default function Login() {
   }, [isAuthenticated, navigate]);
 
   const loginBtnHandler = async () => {
+    setIsLoading(true);
     const requestOptions: requestOptionsType = {
       method: "POST",
       credentials: "include",
@@ -44,6 +47,8 @@ export default function Login() {
       const response = await fetch(`${apiUrl}/login`, requestOptions);
       // const data = await response.json();
       const bodyRes = await response.json();
+
+      setIsLoading(false);
 
       console.log("Data from the server:", bodyRes);
       if (response.ok) {
@@ -85,13 +90,14 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
-        <button
-          className="submit-btn"
-          onClick={loginBtnHandler}
-          disabled={!userName || !password}
-        >
-          Login
-        </button>
+
+        <LoadingButton
+          id="login-btn"
+          btnHandler={loginBtnHandler}
+          isDisabled={!userName || !password}
+          isLoading={isLoading}
+          label="Login"
+        />
         {loginStatus && <pre className="status">{loginStatus}</pre>}
         {
           <pre className="info">

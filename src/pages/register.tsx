@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useNav from "../hooks/navigate";
+import LoadingButton from "../components/loadingbtn";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function Register() {
@@ -10,9 +11,11 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [registerStatus, setRegisterStatus] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { navigate } = useNav();
 
   const registerBtnHandler = async () => {
+    setIsLoading(true);
     const requestOptions = {
       method: "POST",
       headers: {
@@ -33,6 +36,7 @@ export default function Register() {
       const response = await apiResponse.json();
       console.log("Data from the server:", response);
 
+      setIsLoading(false);
       if (apiResponse.status === 200) {
         setTimeout(() => {
           navigate("/login");
@@ -97,10 +101,11 @@ export default function Register() {
             value={confirmPassword}
           />
         </div>
-        <button
-          className="submit-btn"
-          onClick={registerBtnHandler}
-          disabled={
+
+        <LoadingButton
+          id="register-btn"
+          btnHandler={registerBtnHandler}
+          isDisabled={
             !userName ||
             !email ||
             !firstName ||
@@ -109,9 +114,9 @@ export default function Register() {
             !confirmPassword ||
             password !== confirmPassword
           }
-        >
-          Register
-        </button>
+          label="Register"
+          isLoading={isLoading} // Assuming you don't have a loading state for this button
+        />
         {registerStatus && <pre className="status">{registerStatus}</pre>}
         <pre className="info">
           Already Registered with us?. Kindly{" "}

@@ -5,8 +5,14 @@ import DashboardNav from "../components/dashboardNav";
 import UploadFile from "../components/upload";
 import UploadBtn from "../components/uploadBtn";
 
+type MovieType = {
+  id: string;
+  name: string;
+  video: string;
+};
+
 export default function Dashboard() {
-  const [videoSrc, setVideoSrc] = useState("");
+  const [playingMovie, setPlayingMovie] = useState<MovieType | null>(null);
 
   const [uploadView, setUploadView] = useState(false);
 
@@ -19,8 +25,8 @@ export default function Dashboard() {
       {uploadView && <UploadFile uploadViewHandler={setUploadView} />}
       {!uploadView && (
         <>
-          <MovieList setVideoSrc={setVideoSrc} />
-          <MoviePlayer videoSrc={videoSrc} />
+          <MovieList setPlayingMovie={setPlayingMovie} />
+          {playingMovie && <MoviePlayer {...playingMovie} />}
         </>
       )}
     </div>

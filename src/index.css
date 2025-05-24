@@ -50,19 +50,19 @@ h1 {
 
 /* Track (background of the scrollbar) */
 ::-webkit-scrollbar-track {
-  background: #54b17e;
+  background: #2d6144;
   border-radius: 10px;
 }
 
 /* Handle (draggable part) */
 ::-webkit-scrollbar-thumb {
-  background: #2d6144;
+  background: #54b17e;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #2d6144;
+  background: #54b17e;
 }
 
 /* Default styles (light) */

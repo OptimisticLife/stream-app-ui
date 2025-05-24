@@ -1,25 +1,30 @@
 import { useEffect, useRef } from "react";
 
-export default function MoviePlayer({ videoSrc }: { videoSrc: string }) {
+type MovieType = {
+  id: string;
+  name: string;
+  video: string;
+};
+
+export default function MoviePlayer({ name, video }: MovieType) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    console.log(`src has been changed to ${videoSrc}`);
     if (videoRef.current) {
       videoRef.current.load(); // This reloads the video
     }
-  }, [videoSrc]);
+  }, [video]);
 
   return (
-    // Run this effect when videoSrc changes
-    // Check if videoSrc is not empty
-    videoSrc === "" ? (
+    // Run this effect when playingMovie changes
+    // Check if playingMovie is not empty
+    video === "" ? (
       <pre>Click any thumbnail to play video.</pre>
     ) : (
       <div className="movieplayer">
-        <pre className="section-title">{videoSrc}</pre>
+        <pre className="section-title">{name}</pre>
         <video className="video-player" ref={videoRef} controls>
-          <source src={videoSrc} type="video/mp4" />
+          <source src={video} type="video/mp4" />
         </video>
       </div>
     )
